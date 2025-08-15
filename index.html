@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Character Name Generator</title>
+    <!-- Tailwind CSS for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Custom styles for a better look and feel */
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        /* Custom radio button style */
+        .custom-radio input[type="radio"] {
+            display: none;
+        }
+        .custom-radio label {
+            transition: all 0.2s ease-in-out;
+        }
+        .custom-radio input[type="radio"]:checked + label {
+            background-color: #4f46e5; /* indigo-600 */
+            color: white;
+            border-color: #4f46e5; /* indigo-600 */
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+        }
+    </style>
+</head>
+<body class="bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-200 flex items-center justify-center min-h-screen p-4">
+
+    <div class="w-full max-w-md mx-auto bg-white dark:bg-gray-800 rounded-2xl shadow-2xl p-6 md:p-8">
+        
+        <div class="text-center mb-8">
+            <h1 class="text-3xl md:text-4xl font-bold text-indigo-600 dark:text-indigo-400">Character Name Generator</h1>
+            <p class="text-gray-500 dark:text-gray-400 mt-2">Generate a name and job title for your character.</p>
+        </div>
+
+        <!-- Step 1: Gender Selection -->
+        <div class="mb-6">
+            <h2 class="text-lg font-semibold mb-3 text-center">Step 1: Choose a Gender</h2>
+            <div class="grid grid-cols-2 gap-4 custom-radio">
+                <div>
+                    <input type="radio" id="male" name="gender" value="male" checked class="hidden">
+                    <label for="male" class="block w-full text-center p-4 rounded-lg border-2 border-gray-200 dark:border-gray-600 cursor-pointer hover:border-indigo-500 dark:hover:border-indigo-400">
+                        <span class="text-2xl">♂</span>
+                        <span class="block font-semibold mt-1">Male</span>
+                    </label>
+                </div>
+                <div>
+                    <input type="radio" id="female" name="gender" value="female" class="hidden">
+                    <label for="female" class="block w-full text-center p-4 rounded-lg border-2 border-gray-200 dark:border-gray-600 cursor-pointer hover:border-indigo-500 dark:hover:border-indigo-400">
+                        <span class="text-2xl">♀</span>
+                        <span class="block font-semibold mt-1">Female</span>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Generate Button -->
+        <div class="mb-6">
+            <button id="generate-btn" class="w-full bg-indigo-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-indigo-700 focus:outline-none focus:ring-4 focus:ring-indigo-300 dark:focus:ring-indigo-800 transition-transform transform hover:scale-105">
+                Generate
+            </button>
+        </div>
+        
+        <!-- Step 2 & 3: Results -->
+        <div id="results-container" class="text-center space-y-6 hidden">
+            <!-- Name Result -->
+            <div>
+                <h2 class="text-sm font-medium text-gray-500 dark:text-gray-400 tracking-wider uppercase">Name</h2>
+                <p id="character-name" class="text-2xl md:text-3xl font-bold mt-1"></p>
+            </div>
+
+            <!-- Job Result -->
+            <div>
+                <h2 class="text-sm font-medium text-gray-500 dark:text-gray-400 tracking-wider uppercase">Job Title</h2>
+                <p id="character-job" class="text-xl md:text-2xl font-semibold text-indigo-600 dark:text-indigo-400 mt-1"></p>
+            </div>
+
+            <!-- Re-roll Buttons -->
+            <div class="flex flex-col sm:flex-row gap-4 pt-4">
+                <button id="reroll-name-btn" class="w-full bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 font-semibold py-2 px-4 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-400 transition">
+                    Re-roll Name
+                </button>
+                <button id="reroll-job-btn" class="w-full bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 font-semibold py-2 px-4 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-400 transition">
+                    Re-roll Job
+                </button>
+            </div>
+        </div>
+
+        <!-- Combination Info -->
+        <div class="text-center mt-8">
+            <p class="text-xs text-gray-400 dark:text-gray-500">180,000 unique name combinations possible.</p>
+        </div>
+
+    </div>
+
+    <script>
+        // --- DATA POOLS ---
+        // Data provided by the user
+        const maleFirstNames = ["Liam", "Noah", "Oliver", "James", "Elijah", "William", "Henry", "Lucas", "Benjamin", "Theodore", "Mateo", "Levi", "Sebastian", "Daniel", "Jack", "Michael", "Alexander", "Owen", "Asher", "Samuel", "Ethan", "Leo", "Jackson", "Mason", "Ezra", "John", "Hudson", "Luca", "Aiden", "Joseph", "David", "Jacob", "Logan", "Luke", "Julian", "Gabriel", "Grayson", "Wyatt", "Matthew", "Maverick", "Dylan", "Isaac", "Elias", "Anthony", "Thomas", "Jayden", "Carter", "Santiago", "Ezekiel", "Charles", "Josiah", "Caleb", "Cooper", "Lincoln", "Miles", "Christopher", "Nathan", "Isaiah", "Kai", "Joshua", "Andrew", "Angel", "Adrian", "Cameron", "Nolan", "Roman", "Jonathan", "Eli", "Connor", "Jeremiah", "Hunter", "Jordan", "Jose", "Nicholas", "Robert", "Cole", "Tyler", "Christian", "Jaxon", "Ian", "Brooks", "Weston", "Axel", "Dominic", "Easton", "Adam", "Jax", "Everett", "Kevin", "Ivan", "Carson", "Amir", "Ryan", "Beau", "Gael", "Aaron", "Brandon", "Carlos", "Justin", "Oscar", "Vincent", "Finn", "Max", "Evan", "Arthur", "Jesse", "Bryce", "Archer", "Omar", "Felix", "Zion", "Declan", "Elliot", "Manuel", "Colton", "Damian", "Walter", "Alan", "Beckett", "Preston", "Emilio", "Leon", "Rowan", "Brian", "Eric", "Muhammad", "Austin", "Dean", "Lorenzo", "Xavier", "Atlas", "Cory", "Saul", "Tanner", "Silas", "Keith", "Andre", "Blake", "Grant", "Peter", "Richard", "Brody", "Luis", "Casey", "Fernando", "Patrick", "Rhett", "Clayton", "George", "Israel", "Jamal", "Edgar", "Ali", "Bodhi", "Cody", "Jermaine", "Forrest", "Miguel", "Rohan", "Wade", "Warren", "Victor", "Seth", "Sean", "Troy", "Tony", "Rafael", "Ricardo", "Riley", "Sergio", "Shane", "Spencer", "Steven", "Scott", "Kyle", "Kenneth", "Kent", "Karl", "Jared", "Jeffrey", "Jason", "Jake", "Harvey", "Graham", "Gordon", "Glen", "Franklin", "Francis", "Eugene", "Dennis", "Derek", "Drew", "Douglas", "Dwight", "Dwayne", "Edward", "Edwin", "Frederick", "Gerald", "Gary", "Gregory", "Harold", "Hector", "Howard", "Hugh", "Jerry", "Joe", "Joel", "Jon", "Jorge", "Julius", "Curtis", "Corey", "Clifford", "Chester", "Clark", "Chris", "Byron", "Brady", "Barry", "Antonio", "Albert", "Alfred", "Abel", "Abraham", "Alex", "Allen", "Andy", "Angelo", "Apollo", "Ari", "Arlo", "Armando", "Arnold", "August", "Avery", "Ben", "Bennett", "Blaine", "Blair", "Bradley", "Brendan", "Brent", "Brett", "Bruce", "Bryan", "Cade", "Callum", "Calvin", "Carl", "Cedric", "Cesar", "Chad", "Chance", "Chandler", "Chase", "Christian", "Clinton", "Colby", "Colin", "Collin", "Conrad", "Corbin", "Craig", "Cristian", "Cruz", "Cyrus", "Dale", "Dallas", "Dalton", "Damon", "Dane", "Danny", "Dante", "Darren", "Darryl", "Darwin", "Dave", "Davis", "Derrick", "Desmond", "Devon", "Dexter", "Diego", "Dillon", "Donald", "Donovan", "Drake", "Dustin", "Eddie", "Edison", "Elmer", "Elton", "Emmanuel", "Emmett", "Enrique", "Erik", "Ernest", "Erwin", "Esteban"];
+        const femaleFirstNames = ["Olivia", "Emma", "Charlotte", "Amelia", "Sophia", "Isabella", "Ava", "Mia", "Evelyn", "Luna", "Harper", "Camila", "Gianna", "Scarlett", "Elizabeth", "Eleanor", "Emily", "Chloe", "Mila", "Violet", "Penelope", "Lily", "Avery", "Sofia", "Ella", "Aria", "Ellie", "Hazel", "Abigail", "Nova", "Isla", "Grace", "Elena", "Victoria", "Naomi", "Layla", "Zoe", "Hannah", "Aurora", "Audrey", "Stella", "Willow", "Leah", "Nora", "Savannah", "Addison", "Brooklyn", "Bella", "Claire", "Lucy", "Paisley", "Everly", "Kinsley", "Riley", "Caroline", "Genesis", "Maya", "Kennedy", "Madelyn", "Cora", "Ruby", "Eva", "Serenity", "Autumn", "Adeline", "Hailey", "Delilah", "Quinn", "Nevaeh", "Piper", "Sadie", "Clara", "Emery", "Samantha", "Anna", "Eliana", "Alice", "Gabriella", "Julia", "Ivy", "Josephine", "Aaliyah", "Katherine", "Vivian", "Kaylee", "Sophie", "Brielle", "Madeline", "Peyton", "Rylee", "Kimberly", "Maria", "Valerie", "Andrea", "Parker", "Melody", "Athena", "Jade", "Isabelle", "Liliana", "Rose", "Taylor", "Reagan", "Valentina", "Faith", "Lyla", "Mary", "Margaret", "Lydia", "Sarah", "Rachel", "Rebecca", "Jessica", "Jennifer", "Amanda", "Melissa", "Stephanie", "Nicole", "Heather", "Amy", "Michelle", "Laura", "Megan", "Kelly", "Tracy", "Christina", "Catherine", "Angela", "Cynthia", "Sandra", "Donna", "Carol", "Patricia", "Barbara", "Linda", "Deborah", "Susan", "Karen", "Nancy", "Lisa", "Betty", "Dorothy", "Helen", "Sharon", "Ashley", "Tiffany", "Crystal", "Amber", "Brittany", "Danielle", "Lauren", "Natalie", "Jordan", "Sydney", "Morgan", "Brooke", "Paige", "Erin", "Molly", "Holly", "April", "Whitney", "Chelsea", "Cassidy", "Courtney", "Heidi", "Allison", "Leslie", "Vanessa", "Diana", "Jane", "Anne", "Juliet", "Georgia", "Jasmine", "Daisy", "Iris", "Poppy", "Summer", "June", "Hope", "Joy", "Charity", "Prudence", "Destiny", "Harmony", "Trinity", "London", "Bailey", "Skylar", "Dakota", "Logan", "Alex", "Cameron", "Rowan", "River", "Phoenix", "Sawyer", "Charlie", "Frankie", "Billie", "Stevie", "Blake", "Drew", "Dylan", "Jesse", "Jamie", "Casey", "Kendall", "Reese", "Sloane", "Teagan", "Mackenzie", "Finley", "Aubrey", "Blaire", "Maeve", "Fiona", "Bridget", "Colleen", "Siobhan", "Ciara", "Niamh", "Roisin", "Tara", "Aine", "Deirdre", "Sinead", "Orla", "Grainne", "Aoife", "Saoirse", "Eimear", "Lucia", "Francesca", "Alessia", "Chiara", "Giulia", "Martina", "Beatrice", "Bianca", "Genevieve", "Juliette", "Celine", "Simone", "Esme", "Eloise", "Margot", "Anais", "Camille", "Sylvie", "Colette", "Monique", "Adelaide", "Gabrielle", "Leonore", "Odette", "Fatima", "Aisha", "Noor", "Zara", "Iman", "Amina", "Samira", "Yasmin", "Salma", "Jamila", "Farida", "Nadia", "Mariam", "Khadija", "Ines", "Aliyah", "Anika", "Priya", "Diya", "Lakshmi", "Padma", "Indira", "Sita", "Kavita", "Meera", "Neha", "Riya", "Sanjana", "Hanna", "Freya", "Ingrid", "Astrid", "Solveig", "Linnea", "Katja", "Maja", "Elin", "Saga", "Lovisa", "Klara", "Alva", "Sigrid"];
+        const lastNames = ["Smith", "Johnson", "Williams", "Brown", "Jones", "Garcia", "Miller", "Davis", "Rodriguez", "Martinez", "Hernandez", "Lopez", "Gonzalez", "Wilson", "Anderson", "Thomas", "Taylor", "Moore", "Jackson", "Martin", "Lee", "Perez", "Thompson", "White", "Harris", "Sanchez", "Clark", "Ramirez", "Lewis", "Robinson", "Walker", "Young", "Allen", "King", "Wright", "Scott", "Torres", "Nguyen", "Hill", "Flores", "Green", "Adams", "Nelson", "Baker", "Hall", "Rivera", "Campbell", "Mitchell", "Carter", "Roberts", "Gomez", "Phillips", "Evans", "Turner", "Diaz", "Parker", "Cruz", "Edwards", "Collins", "Reyes", "Stewart", "Morris", "Morales", "Murphy", "Cook", "Rogers", "Gutierrez", "Ortiz", "Morgan", "Cooper", "Peterson", "Bailey", "Reed", "Kelly", "Howard", "Ramos", "Kim", "Cox", "Ward", "Richardson", "Watson", "Brooks", "Chavez", "Wood", "James", "Bennett", "Gray", "Mendoza", "Ruiz", "Hughes", "Price", "Alvarez", "Castillo", "Sanders", "Patel", "Myers", "Long", "Ross", "Foster", "Jimenez", "Powell", "Jenkins", "Perry", "Russell", "Sullivan", "Bell", "Coleman", "Butler", "Henderson", "Barnes", "Gonzales", "Fisher", "Vasquez", "Simmons", "Romero", "Jordan", "Patterson", "Alexander", "Hamilton", "Graham", "Wallace", "Griffin", "West", "Cole", "Hayes", "Bryant", "Herrera", "Gibson", "Ellis", "Tran", "Medina", "Aguilar", "Stevens", "Murray", "Ford", "Castro", "Marshall", "Owen", "Harrison", "Fernandez", "Mcdonald", "Woods", "Washington", "Kennedy", "Wells", "Webb", "Olson", "Wagner", "Hunter", "Snyder", "Crawford", "Mason", "Boyd", "Shaw", "Gordon", "Burns", "Warren", "Dixon", "Holmes", "Rice", "Robertson", "Hunt", "Black", "Daniels", "Palmer", "Mills", "Nichols", "Grant", "Knight", "Ferguson", "Rose", "Stone", "Hawkins", "Dunn", "Perkins", "Hudson", "Spencer", "Gardner", "Stephens", "Payne", "Pierce", "Berry", "Matthews", "Arnold", "Larson", "Carlson", "Hansen", "Ryan", "Cunningham", "Duncan", "Hart", "Andrews", "Carr", "George", "Fox", "Franklin", "Day", "Austin", "Burton", "Lawrence", "Bishop", "Porter", "Jacobs", "Wheeler", "Chapman", "Watkins", "Stanley", "Holland", "Terry", "Hale", "Lyons", "Reid", "Tucker", "Pearson", "Mccoy", "Walsh", "Weber", "Schmidt", "Schneider", "Hoffman", "Meyer", "Bauer", "Becker", "Klein", "Wolf", "Neumann", "Zimmerman", "Schultz", "Riley", "Fuller", "Lucas", "Higgins", "Elliott", "Freeman", "Valdez", "Walters", "Casey", "Cross", "Wade", "Newman", "Parsons", "Sharp", "Bowen", "Todd", "Lawson", "Soto", "Fields", "Parks", "Graves", "Bush", "Morton", "Abbott", "Barker", "Welch", "Paul", "Rhodes", "Quinn", "Lane", "Vance", "Byrd", "Gregory", "Harvey", "Craig", "Powers", "Pena", "Cobb", "Gibbs", "Ali", "Khan", "Singh", "Chen", "Wang", "Li", "Liu", "Zhang", "Huang", "Choi", "Park", "Yamamoto", "Tanaka", "Suzuki", "Kumar", "Shah", "Rossi", "Russo", "Ferrari", "Esposito", "Bianchi", "Romano", "Colombo", "Ricci", "Marino", "Greco", "Bruno", "Kowalski", "Nowak", "Lewandowski", "Fraser", "Cameron", "Silva", "Costa", "Jensen", "Nielsen", "Ivanov", "Popov", "Dubois", "Leroy", "Moreau", "Simon", "Laurent", "Foley", "Holloway", "Dalton", "Armstrong", "Fleming", "Townsend", "Erickson", "Bowman"];
+        const jobTitles = ["CEO", "CFO", "COO", "CTO", "Doctor", "Nurse", "Lawyer", "Judge", "Chef", "Pilot", "Farmer", "Teacher", "Coach", "Actor", "Agent", "Artist", "Author", "Baker", "Barber", "Broker", "Buyer", "Cook", "Dancer", "Editor", "Intern", "Janitor", "Mason", "Model", "Pastor", "Poet", "Priest", "Ranger", "Realtor", "Sailor", "Singer", "Tailor", "Tutor", "Usher", "Vet", "Writer", "Welder", "Painter", "Plumber", "Roofer", "Foreman", "Manager", "Director", "Analyst", "Designer", "Developer", "Engineer", "Scientist", "Specialist", "Assistant", "Associate", "Consultant", "Technician", "Operator", "Inspector", "Surveyor", "Appraiser", "Auditor", "Actuary", "Economist", "Biologist", "Chemist", "Physicist", "Geologist", "Botanist", "Zoologist", "Curator", "Historian", "Librarian", "Translator", "Reporter", "Producer", "Publisher", "Architect", "Carpenter", "Electrician", "Mechanic", "Machinist", "Jeweler", "Potter", "Sculptor", "Composer", "Musician", "Barista", "Bartender", "Waiter", "Host", "Driver", "Stylist", "Florist", "Trainer", "Planner", "Recruiter", "Supervisor", "Principal", "Dean", "Provost", "Captain", "Sergeant", "Detective", "Firefighter", "Paramedic", "Pharmacist", "Dentist", "Surgeon", "Optometrist", "Radiologist", "Therapist", "Counselor", "Social Worker", "Paralegal", "Bailiff", "Clerk", "Accountant", "Bookkeeper", "Cashier", "Sales Rep", "HR Generalist", "IT Support", "Web Developer", "UX Designer", "UI Designer", "QA Tester", "Data Scientist", "SEO Specialist", "Network Admin", "DevOps Engineer", "Systems Analyst", "Cloud Architect", "Database Admin", "Security Analyst", "Dental Hygienist", "Medical Asst", "Lab Tech", "Phlebotomist", "Dietitian", "Oncologist", "Cardiologist", "Neurologist", "Psychologist", "Psychiatrist", "Police Officer", "Park Ranger", "Postal Worker", "Diplomat", "Policy Advisor", "City Planner", "Professor", "Lecturer", "Research Asst", "Sommelier", "Concierge", "Bellhop", "Housekeeper", "Flight Attendant", "Travel Agent", "Tour Guide", "Event Planner", "Caterer", "Loan Officer", "Stockbroker", "Financial Advisor", "Underwriter", "Tax Preparer", "Brand Manager", "Marketing Coord", "PR Specialist", "Social Media Mgr", "Media Planner", "Account Exec", "Merchandiser", "Store Manager", "Shift Leader", "Key Holder", "Maintenance Tech", "Custodian", "Landscaper", "Groundskeeper", "HVAC Tech", "Pipefitter", "Ironworker", "Glazier", "Forklift Op", "Crane Operator", "CDL Driver", "Bus Driver", "Taxi Driver", "Chauffeur", "Valet", "Nanny", "Caregiver", "Dog Groomer", "Vet Tech", "Locksmith", "Blacksmith", "Choreographer", "Playwright", "Screenwriter", "Film Director", "Cinematographer", "Sound Engineer", "Makeup Artist", "Wardrobe Stylist", "Prop Master", "Set Designer", "Casting Director", "Stunt Person", "Foley Artist", "Colorist", "Rigger", "Grip", "Gaffer", "Best Boy", "Script Supervisor", "Location Scout", "Line Producer", "Showrunner", "News Editor", "Photojournalist", "Cartographer", "Drafter", "Civil Engineer", "Mech Engineer", "Elec Engineer", "Chem Engineer", "Aero Engineer", "Software Engineer", "Hardware Engineer", "Field Engineer", "Quality Engineer", "Safety Officer", "Compliance Officer", "Data Entry Clerk", "Receptionist", "Admin Assistant", "Exec Assistant", "Mail Carrier", "Warehouse Worker", "Packer", "Shipper", "Logistics Coord", "Dispatcher", "Air Traffic Ctrl", "Deckhand", "First Mate", "Geographer", "Meteorologist", "Seismologist", "Paleontologist", "Pharmacologist", "Toxicologist", "Epidemiologist", "Immunologist", "Microbiologist", "Neuroscientist", "Oceanographer", "Conservationist", "Fundraiser", "Grant Writer", "Illustrator", "Animator", "Videographer", "Photographer", "Copywriter", "Content Creator", "Podcaster", "Announcer"];
+
+        // --- DOM ELEMENTS ---
+        const generateBtn = document.getElementById('generate-btn');
+        const rerollNameBtn = document.getElementById('reroll-name-btn');
+        const rerollJobBtn = document.getElementById('reroll-job-btn');
+        const resultsContainer = document.getElementById('results-container');
+        const characterNameEl = document.getElementById('character-name');
+        const characterJobEl = document.getElementById('character-job');
+
+        // --- HELPER FUNCTION ---
+        /**
+         * Gets a random item from an array.
+         * @param {Array} arr The array to pick from.
+         * @returns {*} A random item from the array.
+         */
+        const getRandomItem = (arr) => arr[Math.floor(Math.random() * arr.length)];
+
+        // --- CORE FUNCTIONS ---
+        /**
+         * Generates a new name based on the selected gender.
+         */
+        const generateName = () => {
+            const selectedGender = document.querySelector('input[name="gender"]:checked').value;
+            const firstName = (selectedGender === 'male') ? getRandomItem(maleFirstNames) : getRandomItem(femaleFirstNames);
+            const lastName = getRandomItem(lastNames);
+            characterNameEl.textContent = `${firstName} ${lastName}`;
+        };
+
+        /**
+         * Generates a new job title.
+         */
+        const generateJob = () => {
+            characterJobEl.textContent = getRandomItem(jobTitles);
+        };
+
+        // --- EVENT LISTENERS ---
+        /**
+         * Handles the main "Generate" button click.
+         * Generates a full character and displays the results section.
+         */
+        generateBtn.addEventListener('click', () => {
+            generateName();
+            generateJob();
+            // Show the results container if it's hidden
+            if (resultsContainer.classList.contains('hidden')) {
+                resultsContainer.classList.remove('hidden');
+            }
+        });
+
+        /**
+         * Handles the "Re-roll Name" button click.
+         */
+        rerollNameBtn.addEventListener('click', generateName);
+
+        /**
+         * Handles the "Re-roll Job" button click.
+         */
+        rerollJobBtn.addEventListener('click', generateJob);
+
+    </script>
+</body>
+</html>
